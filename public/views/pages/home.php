@@ -34,6 +34,47 @@
         En utilisant <code>url('/movies')</code> pour aller vers la route <code>/movies</code> par exemple. Pour aller vers l'accueil, <code>url('/')</code>.
     </li>
 
+    <li>
+        <strong>Comment utiliser des requêtes personnalisées ?</strong><br>
+
+        <ol>
+            <li>Créer dans le Model de jointure la méthode (<code>EmprunteurDisque</code> par ex.), faire la requête dedans et retourner le résultat dans $data grâce à <code>Db::dbQuery()</code>: <br>
+                <pre>
+                    <code>
+                        public static function listeDisquesNonEmpruntes() {
+
+                            $req = 'SELECT *
+                                    FROM disque
+                                    LEFT JOIN emprunteur_disque ON disque.id = emprunteur_disque.id_disque
+                                    WHERE id_emprunteur IS NULL';
+
+                            return $data = Db::dbQuery($req);
+                        }
+                    </code>
+                </pre>
+            </li>
+            <li>Appeler la requête depuis un contrôleur (<code>EmprunteursDisquesController</code> par ex.), et vardumper la data :<br>
+                <pre>
+                    <code>
+                        public function listeNomsEmprunteurs() {
+                            $data = EmprunteurDisque::listeNomsEmprunteurs();
+                            var_dump($data);
+                        }
+                    </code>
+                </pre>
+            </li>
+            <li>Créer la route correspondante afin d'accéder au résultat :<br>
+                <pre>
+                    <code>
+                        $routes->get('/listeNomsEmprunteurs', 'EmprunteursDisquesController@listeNomsEmprunteurs');
+                    </code>
+                </pre>
+            </li>
+        </ol>
+
+        En utilisant <code>url('/movies')</code> pour aller vers la route <code>/movies</code> par exemple. Pour aller vers l'accueil, <code>url('/')</code>.
+    </li>
+
     
 </ul>
 
